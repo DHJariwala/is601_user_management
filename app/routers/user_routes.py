@@ -281,3 +281,23 @@ async def update_current_user(
     if not updated:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update failed")
     return UserResponse.model_validate(updated)
+
+from pydantic import BaseModel
+class ProfessionalStatusUpdate(BaseModel):
+    is_professional: bool
+
+@router.patch(
+    "/users/{user_id}/professional",
+    response_model=UserResponse,
+    dependencies=[Depends(require_role(["ADMIN","MANAGER"]))],
+    tags=["User Management Requires (Admin or Manager Roles)"]
+)
+async def set_professional_status(
+    user_id: UUID,
+    status: ProfessionalStatusUpdate,
+    db: AsyncSession = Depends(get_db)
+):
+    updated = await UserService.update(db, user_id, {"is_professional": status.is_professional})
+    if not updated:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return UserResponse.model_validate(updated)
