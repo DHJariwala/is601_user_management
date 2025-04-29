@@ -245,3 +245,39 @@ async def verify_email(user_id: UUID, token: str, db: AsyncSession = Depends(get
     if await UserService.verify_email_with_token(db, user_id, token):
         return {"message": "Email verified successfully"}
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired verification token")
+
+# New feature
+@router.get(
+    "/users/me",
+    response_model=UserResponse,
+    tags=["User Profile"]
+)
+async def read_current_user(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    user_id = UUID(current_user["user_id"])
+    user = await UserService.get_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return UserResponse.model_validate(user)
+
+@router.patch(
+    "/users/me",
+    response_model=UserResponse,
+    tags=["User Profile"]
+)
+async def update_current_user(
+    user_update: UserUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    data = user_update.model_dump(exclude_unset=True)
+    # prevent privilege escalation:
+    data.pop("role", None)
+    data.pop("is_professional", None)
+    user_id = UUID(current_user["user_id"])
+    updated = await UserService.update(db, user_id, data)
+    if not updated:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Update failed")
+    return UserResponse.model_validate(updated)
