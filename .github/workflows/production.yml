@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev/user_profile_management
+      - tests/user_profile_management
   pull_request:
     branches:
       - main
