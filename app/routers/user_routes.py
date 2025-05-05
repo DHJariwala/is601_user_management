@@ -45,7 +45,8 @@ settings = get_settings()
 )
 async def read_current_user(
     db: AsyncSession = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_role(["ADMIN", "MANAGER"]))
 ):
     user_id = UUID(current_user["user_id"])
     user = await UserService.get_by_id(db, user_id)
@@ -61,7 +62,8 @@ async def read_current_user(
 async def update_current_user(
     user_update: UserUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: dict = Depends(get_current_user)
+    # current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(require_role(["ADMIN", "MANAGER"]))
 ):
     data = user_update.model_dump(exclude_unset=True)
     # prevent privilege escalation:
@@ -85,10 +87,10 @@ class ProfessionalStatusUpdate(BaseModel):
 )
 async def set_professional_status(
     user_id: UUID,
-    status: ProfessionalStatusUpdate,
+    status_update: ProfessionalStatusUpdate,
     db: AsyncSession = Depends(get_db)
 ):
-    updated = await UserService.update(db, user_id, {"is_professional": status.is_professional})
+    updated = await UserService.update(db, user_id, {"is_professional": status_update.is_professional})
     if not updated:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return UserResponse.model_validate(updated)
