@@ -1,5 +1,5 @@
 from builtins import ValueError, any, bool, str
-from pydantic import BaseModel, EmailStr, Field, validator, root_validator
+from pydantic import BaseModel, EmailStr, Field, validator, root_validator, field_validator
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
@@ -36,6 +36,21 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
     password: str = Field(..., example="Secure*1234")
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, password: str) -> str:
+        if len(password) < 8:
+            raise ValueError('Password must be at least 8 characters long')
+        if not re.search(r'[A-Z]', password):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not re.search(r'[a-z]', password):
+            raise ValueError('Password must contain at least one lowercase letter')
+        if not re.search(r'[0-9]', password):
+            raise ValueError('Password must contain at least one digit')
+        if not re.search(r'[\W_]', password):
+            raise ValueError('Password must contain at least one special character')
+        return password
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = Field(None, example="john.doe@example.com")
