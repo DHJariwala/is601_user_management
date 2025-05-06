@@ -6,6 +6,7 @@ on:
       - main
       - dev/user_profile_management
       - tests/user_profile_management
+      - issues/1-verify-email-missing-unique-identifier-in-verify-email-link
   pull_request:
     branches:
       - main
