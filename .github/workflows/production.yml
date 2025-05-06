@@ -8,6 +8,7 @@ on:
       - tests/user_profile_management
       - issues/1-verify-email-missing-unique-identifier-in-verify-email-link
       - issues/2-admin-changed-to-authenticated-when-email-is-verified
+      - issues/3-verification-token-not-generated-for-admin
   pull_request:
     branches:
       - main
