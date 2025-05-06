@@ -1,4 +1,5 @@
 from builtins import ValueError, any, bool, str
+from multiprocessing import allow_connection_pickling
 from pydantic import BaseModel, EmailStr, Field, validator, root_validator, field_validator
 from typing import Optional, List
 from datetime import datetime
@@ -51,6 +52,12 @@ class UserCreate(UserBase):
         if not re.search(r'[\W_]', password):
             raise ValueError('Password must contain at least one special character')
         return password
+    
+    @field_validator('email', mode='before')
+    @classmethod
+    def normalize_email(cls, email: str) -> str:
+        return email.strip().lower()
+
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = Field(None, example="john.doe@example.com")

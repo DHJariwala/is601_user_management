@@ -10,6 +10,7 @@ on:
       - issues/2-admin-changed-to-authenticated-when-email-is-verified
       - issues/3-verification-token-not-generated-for-admin
       - issues/4-no-password-complexity-enforcement
+      - issues/5-user-can-register-using-same-email-address
   pull_request:
     branches:
       - main
