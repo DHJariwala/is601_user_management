@@ -37,9 +37,10 @@ Dockerhub repository link is [here](https://hub.docker.com/repository/docker/dhj
 
 ## Rubrics
 
-✅ New feature
-✅ New tests
-✅ New Issues and fixes (QA)
-✅ 1-2 page document
-✅ All github actions pass
-✅ All tests pass
+✅ New feature <br>
+✅ New tests <br>
+✅ New Issues and fixes (QA) <br>
+✅ 1-2 page document <br>
+✅ All github actions pass <br>
+✅ All tests pass <br>
+✅ 21 new commits overall
