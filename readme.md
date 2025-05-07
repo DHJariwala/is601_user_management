@@ -32,8 +32,12 @@ Issues:
 4. [Issue 4](https://github.com/DHJariwala/is601_user_management/issues/4)
 5. [Issue 5](https://github.com/DHJariwala/is601_user_management/issues/5)
 
+## Document link
+The document can be found [here](doc/dj332_is601-event_management.pdf).
+
 ## Dockerhub Repository Link
 Dockerhub repository link is [here](https://hub.docker.com/repository/docker/dhjariwala/final_project/general).
+
 
 ## Rubrics
 
