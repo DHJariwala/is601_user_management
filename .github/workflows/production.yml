@@ -12,6 +12,7 @@ on:
       - issues/4-no-password-complexity-enforcement
       - issues/5-user-can-register-using-same-email-address
       - tests/new_tests_to_increase_coverage
+      - docs/document_to_submit_and_readme
   pull_request:
     branches:
       - main
